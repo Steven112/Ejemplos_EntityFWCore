@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ETTFWC.Migrations
 {
     [DbContext(typeof(Contexto))]
-    [Migration("20200613011507_CreateSchool")]
-    partial class CreateSchool
+    [Migration("20200613152158_sp-GetStudents")]
+    partial class spGetStudents
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -49,44 +49,74 @@ namespace ETTFWC.Migrations
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("GradoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Nombre")
                         .HasColumnName("Nombre")
                         .HasColumnType("ntext")
                         .HasMaxLength(20);
 
+                    b.Property<int>("relacionGradeId")
+                        .HasColumnType("int");
+
                     b.HasKey("EstudianteId");
 
-                    b.HasIndex("GradoId");
+                    b.HasIndex("relacionGradeId");
 
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("ETTFWC.Models.Grado", b =>
+            modelBuilder.Entity("ETTFWC.Models.EstudianteCurso", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("EstudianteId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CursoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EstudianteId", "CursoId");
+
+                    b.HasIndex("CursoId");
+
+                    b.ToTable("StudentCourses");
+                });
+
+            modelBuilder.Entity("ETTFWC.Models.Grade", b =>
+                {
+                    b.Property<int>("GradeId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("NombreGrado")
+                    b.Property<string>("GradeName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Seccion")
+                    b.Property<string>("Section")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("GradeId");
 
-                    b.ToTable("Grado");
+                    b.ToTable("Grade");
                 });
 
             modelBuilder.Entity("ETTFWC.Models.Estudiante", b =>
                 {
-                    b.HasOne("ETTFWC.Models.Grado", "Grado")
-                        .WithMany("estudiantes")
-                        .HasForeignKey("GradoId")
+                    b.HasOne("ETTFWC.Models.Grade", "Grade")
+                        .WithMany("Students")
+                        .HasForeignKey("relacionGradeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ETTFWC.Models.EstudianteCurso", b =>
+                {
+                    b.HasOne("ETTFWC.Models.Curso", "Curso")
+                        .WithMany("estudianteCursos")
+                        .HasForeignKey("CursoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ETTFWC.Models.Estudiante", "Estudiante")
+                        .WithMany("estudianteCursos")
+                        .HasForeignKey("EstudianteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

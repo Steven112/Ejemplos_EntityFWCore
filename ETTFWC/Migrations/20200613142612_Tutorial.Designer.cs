@@ -4,14 +4,16 @@ using ETTFWC.DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace ETTFWC.Migrations
 {
     [DbContext(typeof(Contexto))]
-    partial class ContextoModelSnapshot : ModelSnapshot
+    [Migration("20200613142612_Tutorial")]
+    partial class Tutorial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -47,6 +49,9 @@ namespace ETTFWC.Migrations
                     b.Property<DateTime>("FechaNacimiento")
                         .HasColumnType("datetime2");
 
+                    b.Property<int?>("GradeId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Nombre")
                         .HasColumnName("Nombre")
                         .HasColumnType("ntext")
@@ -57,7 +62,7 @@ namespace ETTFWC.Migrations
 
                     b.HasKey("EstudianteId");
 
-                    b.HasIndex("relacionGradeId");
+                    b.HasIndex("GradeId");
 
                     b.ToTable("Students");
                 });
@@ -99,9 +104,7 @@ namespace ETTFWC.Migrations
                 {
                     b.HasOne("ETTFWC.Models.Grade", "Grade")
                         .WithMany("Students")
-                        .HasForeignKey("relacionGradeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("GradeId");
                 });
 
             modelBuilder.Entity("ETTFWC.Models.EstudianteCurso", b =>

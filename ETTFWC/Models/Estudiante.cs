@@ -16,16 +16,22 @@ namespace ETTFWC.Models
         public string Nombre { get; set; }
         public string Apellido { get; set; }
         public DateTime FechaNacimiento { get; set; }
-        public int GradoId { get; set; }
-        public Grado Grado { get; set; }
 
-        public Estudiante()
-        {
-            EstudianteId =0;
-            Nombre = string.Empty;
-            Apellido = string.Empty;
-            FechaNacimiento = DateTime.Now;
-            GradoId = 0;
-        }
+        public int relacionGradeId { get; set; }
+        public Grade Grade { get; set; }
+
+        public IList<EstudianteCurso> estudianteCursos { get; set; }
+
+
     }
+    public class Grade
+    {
+        public int GradeId { get; set; }
+        public string GradeName { get; set; }
+        public string Section { get; set; }
+
+        public ICollection<Estudiante> Students { get; set; }
+    }
+
+
 }

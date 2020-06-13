@@ -8,11 +8,7 @@ namespace ETTFWC.Models
     {
         public int CursoId { get; set; }
         public string NombreCurso { get; set; }
+        public IList<EstudianteCurso> estudianteCursos { get; set; }
 
-        public Curso()
-        {
-            CursoId =0;
-            NombreCurso = string.Empty;
-        }
     }
 }
